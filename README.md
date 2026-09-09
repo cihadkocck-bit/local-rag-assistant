@@ -15,3 +15,7 @@ Tamamen yerel donanimda calisan, veri gizliligini koruyan teknik dokuman asistan
 2. foundry server start --port 50000 
 3. foundry model load 
 4. streamlit run app.py
+   
+## ⚡ Nasıl Çalıştırılır?
+1. Yeşil **Code** butonuna basıp **Download ZIP** seçeneğiyle projeyi indirin ve zipten çıkarın.
+2. Klasörün içindeki `RAG_Baslat.bat` dosyasına çift tıklayın.
