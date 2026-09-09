@@ -15,6 +15,6 @@ start "Foundry Server" powershell -NoExit -Command "foundry server start --port 
 start "Model Yukleyici" powershell -NoExit -Command "Write-Host 'Model listesi aciliyor...'; foundry model load; foundry model load"
 
 :: 3. Streamlit Arayuzu
-start "Streamlit App" powershell -NoExit -Command "streamlit run app.py"
+start "Streamlit App" powershell -NoExit -Command "python -m streamlit run app.py"
 
 exit
