@@ -5,14 +5,159 @@ import streamlit as st
 from openai import OpenAI
 from pypdf import PdfReader
 
-# Sayfa Yapılandırması
 st.set_page_config(
     page_title="Yerel RAG Asistanı",
     page_icon="🔬",
     layout="wide"
 )
 
-# Yan Panel - Sunucu Ayarları & Doküman Yükleme
+st.markdown("""
+<style>
+    #MainMenu {visibility: hidden;}
+    header {visibility: hidden;}
+    footer {visibility: hidden;}
+    .stDeployButton {display:none;}
+
+    :root {
+        --background-color: #000411;
+        --secondary-background-color: #070f26;
+        --text-color: #f8fafc;
+    }
+
+    html, body, [data-testid="stAppViewContainer"], .main, .stApp {
+        background-color: #000411 !important;
+        background: radial-gradient(circle at 15% 20%, #071233 0%, #000411 95%) !important;
+        color: #f8fafc !important;
+        font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    }
+
+    [data-testid="stSidebar"], [data-testid="stSidebarContent"] {
+        background-color: #04091a !important;
+        border-right: 1px solid rgba(254, 219, 0, 0.25) !important;
+    }
+
+    [data-testid="stTextInput"] input {
+        background-color: #09132e !important;
+        color: #ffffff !important;
+        border: 1px solid rgba(254, 219, 0, 0.3) !important;
+        border-radius: 10px !important;
+    }
+    [data-testid="stTextInput"] input:focus {
+        border-color: #fedb00 !important;
+        box-shadow: 0 0 10px rgba(254, 219, 0, 0.3) !important;
+    }
+
+    [data-testid="stFileUploader"] {
+        background-color: #071026 !important;
+        border: 1px dashed rgba(254, 219, 0, 0.45) !important;
+        border-radius: 14px !important;
+    }
+    [data-testid="stFileUploaderDropzone"] {
+        background-color: #091533 !important;
+    }
+    [data-testid="stFileUploaderDropzone"] * {
+        color: #cbd5e1 !important;
+    }
+    [data-testid="stFileUploader"] section {
+        background-color: #071026 !important;
+    }
+    [data-testid="stFileUploaderFileData"] {
+        background-color: #0b1c45 !important;
+        border: 1px solid rgba(254, 219, 0, 0.2) !important;
+        border-radius: 10px !important;
+    }
+
+    h1, .stApp h1, [data-testid="stSidebar"] h1 {
+        background: linear-gradient(135deg, #fedb00 0%, #ffea60 50%, #fdbb2d 100%) !important;
+        -webkit-background-clip: text !important;
+        -webkit-text-fill-color: transparent !important;
+        font-weight: 800 !important;
+        letter-spacing: -0.5px;
+    }
+
+    [data-testid="stCaptionContainer"] {
+        color: #cbd5e1 !important;
+        font-weight: 500 !important;
+        font-size: 0.95rem !important;
+    }
+
+    div.stButton > button[kind="primary"] {
+        background: linear-gradient(135deg, #fedb00 0%, #f59e0b 100%) !important;
+        color: #00081a !important;
+        font-weight: 700 !important;
+        border: none !important;
+        border-radius: 12px !important;
+        padding: 0.6rem 1.2rem !important;
+        box-shadow: 0 4px 15px rgba(254, 219, 0, 0.35) !important;
+    }
+    div.stButton > button[kind="primary"]:hover {
+        box-shadow: 0 6px 20px rgba(254, 219, 0, 0.55) !important;
+    }
+
+    div.stButton > button:not([kind="primary"]) {
+        background: #09132e !important;
+        color: #f87171 !important;
+        border: 1px solid rgba(239, 68, 68, 0.4) !important;
+        border-radius: 12px !important;
+    }
+
+    [data-testid="stChatMessage"] {
+        background-color: #071330 !important;
+        border: 1px solid rgba(254, 219, 0, 0.2) !important;
+        border-radius: 16px !important;
+        padding: 16px 20px !important;
+        margin-bottom: 14px !important;
+        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5) !important;
+    }
+
+    [data-testid="stChatMessage"]:has([data-testid="chatAvatarIcon-user"]) {
+        background-color: #fedb00 !important;
+        border: 1px solid #facc15 !important;
+    }
+    [data-testid="stChatMessage"]:has([data-testid="chatAvatarIcon-user"]) * {
+        color: #000000 !important;
+        font-weight: 600 !important;
+    }
+
+    [data-testid="stBottom"], [data-testid="stChatInputContainer"] {
+        background-color: transparent !important;
+    }
+    [data-testid="stChatInput"] {
+        background-color: #091538 !important;
+        border-radius: 16px !important;
+        border: 2px solid #fedb00 !important;
+    }
+    [data-testid="stChatInput"] textarea {
+        color: #ffffff !important;
+        background-color: transparent !important;
+        font-weight: 600 !important;
+    }
+    [data-testid="stChatInput"] textarea::placeholder {
+        color: #cbd5e1 !important;
+        font-weight: 400 !important;
+    }
+    [data-testid="stChatInput"] button {
+        color: #fedb00 !important;
+    }
+    [data-testid="stChatInput"]:focus-within {
+        border-color: #ffffff !important;
+        box-shadow: 0 0 16px rgba(254, 219, 0, 0.6) !important;
+    }
+
+    p, span, label, div {
+        color: #e2e8f0;
+    }
+    strong {
+        color: #fedb00 !important;
+    }
+    code {
+        background-color: #0b1a3d !important;
+        color: #fedb00 !important;
+        border: 1px solid rgba(254, 219, 0, 0.2) !important;
+    }
+</style>
+""", unsafe_allow_html=True)
+
 with st.sidebar:
     st.title("⚙️ Sunucu Ayarları")
     server_port = st.text_input("Foundry Portu", value="50000")
@@ -27,11 +172,10 @@ with st.sidebar:
     st.title("📂 Doküman Yükleme")
     uploaded_file = st.file_uploader("PDF veya Föy Yükle", type=["pdf"])
 
-# Veritabanı Fonksiyonları
 def init_db():
     conn = sqlite3.connect("knowledge_base.db", timeout=30, check_same_thread=False)
     cursor = conn.cursor()
-    cursor.execute("PRAGMA journal_mode=WAL;")  # Eşzamanlı erişim kilidini çözer
+    cursor.execute("PRAGMA journal_mode=WAL;")
     cursor.execute("""
     CREATE TABLE IF NOT EXISTS documents (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -109,7 +253,6 @@ def ask_rag_stream(conn, question: str):
             yield "Bu bilgi dokümanda bulunmamaktadır."
         return not_found(), []
 
-    # Bağlamı ve kaynakları derle
     context_text = "\n\n".join([text for _, _, _, text in results])
     sources = [(fname, page_num) for _, fname, page_num, _ in results]
 
@@ -139,9 +282,7 @@ def ask_rag_stream(conn, question: str):
                     yield delta.content
 
     return stream_generator(), sources
-    return stream_generator(), sources
 
-# İndeksleme ve Veritabanı Sıfırlama Butonları
 with st.sidebar:
     if uploaded_file is not None:
         if st.button("Belgeyi İndeksle", type="primary"):
@@ -158,9 +299,8 @@ with st.sidebar:
         db_conn.commit()
         st.warning("Veritabanı temizlendi.")
 
-# Ana Sohbet Ekranı
 st.title("🔬 Teknik Doküman RAG Asistanı")
-st.caption(f"Phi-3.5-mini + Qwen3-Embedding | Endpoint: `{base_url}`")
+st.caption("🔒 %100 Yerel & Gizlilik Odaklı | Microsoft Foundry Local (Phi-3.5) + Qwen3-Embedding")
 
 if "messages" not in st.session_state:
     st.session_state.messages = []
@@ -179,7 +319,6 @@ if prompt := st.chat_input("Föyle ilgili bir soru sorun..."):
             stream_gen, sources = ask_rag_stream(db_conn, prompt)
             full_response = st.write_stream(stream_gen)
 
-            # Kaynakları göster
             if sources:
                 unique_sources = list(set([f"📌 `{fname}` (Sayfa {pnum})" for fname, pnum in sources]))
                 source_box = "\n\n**Referanslar:**\n" + "\n".join(unique_sources)
