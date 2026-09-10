@@ -3,6 +3,11 @@
 
 https://github.com/user-attachments/assets/b7f39869-a8c4-4270-ad8a-d16f9b41702f
 
+
+[![Uygulama Demo Videosu](https://img.youtube.com/vi/RnslqVKXL8U/hqdefault.jpg)](https://www.youtube.com/watch?v=RnslqVKXL8U)
+
+> 👆 *Uygulamanın çalışmasını ve arayüzünü izlemek için görselin üzerine tıklayın.*
+
 Tamamen yerel donanimda calisan, veri gizliligini koruyan teknik dokuman asistanidir. 
  
 ## Mimari ve Teknolojiler 
