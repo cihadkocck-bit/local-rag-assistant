@@ -15,16 +15,6 @@
 
 ---
 
-### 📺 Demo Videosu
-
-<p align="center">
-  <a href="https://www.youtube.com/watch?v=RnslqVKXL8U">
-    <img src="https://img.youtube.com/vi/RnslqVKXL8U/hqdefault.jpg" alt="Demo Videosu" width="600" />
-  </a>
-  <br>
-  <em>👉 Arayüz ve çalışma videosunu izlemek için görsele tıklayın.</em>
-</p>
-
 ---
 
 ### 🛠️ Mimari ve Teknolojiler
