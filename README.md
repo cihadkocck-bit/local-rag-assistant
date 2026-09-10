@@ -1,6 +1,8 @@
 # Local Technical Document RAG Assistant 
  <img width="1916" height="937" alt="image" src="https://github.com/user-attachments/assets/ef8d5433-4b76-4dfe-87b5-9890e9778688" />
 
+https://github.com/user-attachments/assets/b7f39869-a8c4-4270-ad8a-d16f9b41702f
+
 Tamamen yerel donanimda calisan, veri gizliligini koruyan teknik dokuman asistanidir. 
  
 ## Mimari ve Teknolojiler 
